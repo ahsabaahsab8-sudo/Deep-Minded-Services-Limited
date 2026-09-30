@@ -19,6 +19,17 @@
   ],
   "rewrites": [
     {
+      "source": "/_next/image",
+      "has": [
+        {
+          "type": "query",
+          "key": "url",
+          "value": "(?<imageUrl>.*)"
+        }
+      ],
+      "destination": "/:imageUrl"
+    },
+    {
       "source": "/web-dev",
       "destination": "/web-dev/index.html"
     },
@@ -29,6 +40,14 @@
     {
       "source": "/web",
       "destination": "/web-dev/index.html"
+    },
+    {
+      "source": "/web-dev/assets/:path*",
+      "destination": "/assets/:path*"
+    },
+    {
+      "source": "/web-dev/_next/:path*",
+      "destination": "/_next/:path*"
     }
   ]
 }
