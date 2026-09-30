@@ -48,6 +48,30 @@
     {
       "source": "/web-dev/_next/:path*",
       "destination": "/_next/:path*"
+    },
+    {
+      "source": "/app-dev",
+      "destination": "/app-dev/index.html"
+    },
+    {
+      "source": "/appdev",
+      "destination": "/app-dev/index.html"
+    },
+    {
+      "source": "/app",
+      "destination": "/app-dev/index.html"
+    },
+    {
+      "source": "/_nuxt/:path*",
+      "destination": "/app-dev/_nuxt/:path*"
+    },
+    {
+      "source": "/spline/:path*",
+      "destination": "/app-dev/spline/:path*"
+    },
+    {
+      "source": "/video/:path*",
+      "destination": "/app-dev/video/:path*"
     }
   ]
 }
