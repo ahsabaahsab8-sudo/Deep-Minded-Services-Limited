@@ -148,6 +148,22 @@
     {
       "source": "/images/:path*",
       "destination": "/ai-agents/images/:path*"
+    },
+    {
+      "source": "/saas-dev",
+      "destination": "/saas-dev/index.html"
+    },
+    {
+      "source": "/saas-dev/",
+      "destination": "/saas-dev/index.html"
+    },
+    {
+      "source": "/saasdev",
+      "destination": "/saas-dev/index.html"
+    },
+    {
+      "source": "/saas",
+      "destination": "/saas-dev/index.html"
     }
   ]
 }

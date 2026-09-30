@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 8090;
 const ROOT = __dirname;
 const APP_DEV_DIR = path.join(ROOT, 'app-dev');
 const AI_AGENTS_DIR = path.join(ROOT, 'ai-agents');
+const SAAS_DEV_DIR = path.join(ROOT, 'saas-dev');
 
 const MIME_TYPES = {
   '.html': 'text/html',
@@ -31,6 +32,7 @@ const MIME_TYPES = {
   '.glb': 'model/gltf-binary',
   '.gltf': 'model/gltf+json',
   '.bin': 'application/octet-stream',
+  '.buf': 'application/octet-stream',
   '.mp3': 'audio/mpeg',
   '.wav': 'audio/wav',
   '.ogg': 'audio/ogg',
@@ -73,11 +75,20 @@ const server = http.createServer((req, res) => {
     filePath = path.join(ROOT, 'web-dev', 'index.html');
   } else if (decodedUrl === '/ai-agents' || decodedUrl === '/ai-agents/' || decodedUrl === '/ai-agent' || decodedUrl === '/aiagents' || decodedUrl === '/ai') {
     filePath = path.join(AI_AGENTS_DIR, 'index.html');
+  } else if (decodedUrl === '/saas-dev' || decodedUrl === '/saas-dev/' || decodedUrl === '/saasdev' || decodedUrl === '/saas') {
+    filePath = path.join(SAAS_DEV_DIR, 'index.html');
   } else if (decodedUrl === '/main' || decodedUrl === '/main/' || decodedUrl === '/dms') {
     filePath = path.join(ROOT, 'index.html');
   } else {
+    // Check if file exists inside saas-dev if requested under /saas-dev
+    if (decodedUrl.startsWith('/saas-dev/')) {
+      const relCandidate = path.join(SAAS_DEV_DIR, decodedUrl.replace(/^\/saas-dev\//, ''));
+      if (fs.existsSync(relCandidate) && !fs.statSync(relCandidate).isDirectory()) {
+        filePath = relCandidate;
+      }
+    }
     // Check if file exists inside ai-agents if prefixed or asset
-    if (decodedUrl.startsWith('/ai-agents/')) {
+    if (!filePath && decodedUrl.startsWith('/ai-agents/')) {
       const relCandidate = path.join(AI_AGENTS_DIR, decodedUrl.replace(/^\/ai-agents\//, ''));
       if (fs.existsSync(relCandidate) && !fs.statSync(relCandidate).isDirectory()) {
         filePath = relCandidate;
@@ -103,21 +114,26 @@ const server = http.createServer((req, res) => {
 
   // Fallback checks
   if (!fs.existsSync(filePath)) {
-    const fallbackInAi = path.join(AI_AGENTS_DIR, decodedUrl.replace(/^\/ai-agents\/?/, ''));
-    if (fs.existsSync(fallbackInAi) && !fs.statSync(fallbackInAi).isDirectory()) {
-      filePath = fallbackInAi;
+    const fallbackInSaas = path.join(SAAS_DEV_DIR, decodedUrl.replace(/^\/saas-dev\/?/, ''));
+    if (fs.existsSync(fallbackInSaas) && !fs.statSync(fallbackInSaas).isDirectory()) {
+      filePath = fallbackInSaas;
     } else {
-      const fallbackInAiDirect = path.join(AI_AGENTS_DIR, decodedUrl);
-      if (fs.existsSync(fallbackInAiDirect) && !fs.statSync(fallbackInAiDirect).isDirectory()) {
-        filePath = fallbackInAiDirect;
+      const fallbackInAi = path.join(AI_AGENTS_DIR, decodedUrl.replace(/^\/ai-agents\/?/, ''));
+      if (fs.existsSync(fallbackInAi) && !fs.statSync(fallbackInAi).isDirectory()) {
+        filePath = fallbackInAi;
       } else {
-        const fallbackInAppDev = path.join(APP_DEV_DIR, decodedUrl);
-        if (fs.existsSync(fallbackInAppDev)) {
-          filePath = fallbackInAppDev;
+        const fallbackInAiDirect = path.join(AI_AGENTS_DIR, decodedUrl);
+        if (fs.existsSync(fallbackInAiDirect) && !fs.statSync(fallbackInAiDirect).isDirectory()) {
+          filePath = fallbackInAiDirect;
         } else {
-          const fallbackInWebDev = path.join(ROOT, 'web-dev', decodedUrl);
-          if (fs.existsSync(fallbackInWebDev)) {
-            filePath = fallbackInWebDev;
+          const fallbackInAppDev = path.join(APP_DEV_DIR, decodedUrl);
+          if (fs.existsSync(fallbackInAppDev)) {
+            filePath = fallbackInAppDev;
+          } else {
+            const fallbackInWebDev = path.join(ROOT, 'web-dev', decodedUrl);
+            if (fs.existsSync(fallbackInWebDev)) {
+              filePath = fallbackInWebDev;
+            }
           }
         }
       }

@@ -1,0 +1,212 @@
+.dms-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 94px;
+  height: 42px;
+  color: #fff;
+  font-family: Arial, sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -3px;
+  line-height: 1;
+  text-align: center;
+}
+
+.dms-contact-modal,
+#dmsContactModal {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(3, 5, 16, .72);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .3s ease;
+  backdrop-filter: blur(16px);
+}
+
+#dmsContactModal.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#menu[aria-hidden="true"] {
+  display: none !important;
+}
+
+.dms-contact-panel {
+  position: relative;
+  width: min(100%, 820px);
+  max-height: min(820px, calc(100vh - 32px));
+  overflow: auto;
+  padding: clamp(28px, 4vw, 58px);
+  border: 1px solid rgba(255, 255, 255, .22);
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(19, 25, 67, .98), rgba(5, 8, 26, .98));
+  box-shadow: 0 28px 100px rgba(0, 0, 0, .5), inset 0 1px 0 rgba(255, 255, 255, .12);
+  color: #fff;
+  pointer-events: auto;
+}
+
+.dms-contact-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, .28);
+  border-radius: 50%;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.dms-contact-kicker {
+  margin: 0 0 14px;
+  color: #38e9f4;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .18em;
+}
+
+.dms-contact-panel h2 {
+  margin: 0;
+  font-size: clamp(30px, 5vw, 52px);
+  line-height: .98;
+  letter-spacing: -.02em;
+}
+
+.dms-contact-copy {
+  max-width: 620px;
+  margin: 18px 0 24px;
+  color: rgba(255, 255, 255, .72);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.dms-call-details {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 24px;
+  padding: 14px 16px;
+  border: 1px solid rgba(34, 229, 242, .32);
+  border-radius: 7px;
+  background: rgba(16, 229, 242, .08);
+}
+
+.dms-call-details span {
+  color: rgba(255, 255, 255, .58);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.dms-call-details a {
+  color: #55f3fb;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  text-decoration: none;
+}
+
+.dms-contact-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.dms-project-field,
+.dms-contact-submit,
+.dms-contact-status {
+  grid-column: 1 / -1;
+}
+
+.dms-contact-form label {
+  display: grid;
+  gap: 8px;
+  color: rgba(255, 255, 255, .86);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.dms-contact-form label span {
+  color: rgba(255, 255, 255, .48);
+  font-weight: 400;
+  text-transform: none;
+}
+
+.dms-contact-form input,
+.dms-contact-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: 6px;
+  outline: 0;
+  padding: 13px 14px;
+  background: rgba(0, 0, 0, .22);
+  color: #fff;
+  font: inherit;
+  resize: vertical;
+  transition: border-color .2s ease, background .2s ease;
+}
+
+.dms-contact-form input:focus,
+.dms-contact-form textarea:focus {
+  border-color: #22e5f2;
+  background: rgba(25, 39, 93, .5);
+}
+
+.dms-contact-submit {
+  margin-top: 8px;
+  border: 0;
+  border-radius: 7px;
+  padding: 15px 20px;
+  background: #18dce8;
+  color: #031016;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 800;
+}
+
+.dms-contact-submit:hover {
+  background: #7af8ff;
+}
+
+.dms-contact-status {
+  min-height: 18px;
+  margin: 0;
+  color: #6ff6db;
+  font-size: 13px;
+}
+
+.dms-contact-status.is-error {
+  color: #ffb1b1;
+}
+
+@media (max-width: 600px) {
+  #dmsContactModal {
+    padding: 12px;
+  }
+
+  .dms-contact-panel {
+    padding: 30px 22px 24px;
+  }
+
+  .dms-contact-form {
+    grid-template-columns: 1fr;
+  }
+
+  .dms-project-field,
+  .dms-contact-submit,
+  .dms-contact-status {
+    grid-column: auto;
+  }
+}
