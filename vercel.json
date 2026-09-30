@@ -16,5 +16,19 @@
       "destination": "/:path*",
       "permanent": true
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/web-dev",
+      "destination": "/web-dev/index.html"
+    },
+    {
+      "source": "/webdev",
+      "destination": "/web-dev/index.html"
+    },
+    {
+      "source": "/web",
+      "destination": "/web-dev/index.html"
+    }
   ]
 }
