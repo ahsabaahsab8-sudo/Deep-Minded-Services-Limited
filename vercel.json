@@ -1,17 +1,20 @@
 {
   "cleanUrls": true,
-  "rewrites": [
+  "redirects": [
     {
-      "source": "/",
-      "destination": "/www.vertex3d.asia/index.html"
+      "source": "/www.vertex3d.asia",
+      "destination": "/",
+      "permanent": true
     },
     {
-      "source": "/DMS_logo.jpg",
-      "destination": "/www.vertex3d.asia/DMS_logo.jpg"
+      "source": "/www.vertex3d.asia/index.html",
+      "destination": "/",
+      "permanent": true
     },
     {
-      "source": "/v2645sy3qzdjNjVjODNmYmI5ZjI3NTBkMTE5YjQzZmIz/:match*",
-      "destination": "/www.vertex3d.asia/v2645sy3qzdjNjVjODNmYmI5ZjI3NTBkMTE5YjQzZmIz/:match*"
+      "source": "/www.vertex3d.asia/:path*",
+      "destination": "/:path*",
+      "permanent": true
     }
   ]
 }

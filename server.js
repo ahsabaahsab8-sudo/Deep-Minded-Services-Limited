@@ -65,5 +65,4 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, () => {
   console.log(`DMS local server running at http://localhost:${PORT}`);
-  console.log(`Open http://localhost:${PORT}/www.vertex3d.asia/index.html`);
 });
