@@ -4,6 +4,7 @@ const path = require('path');
 
 const PORT = process.env.PORT || 8090;
 const ROOT = __dirname;
+const APP_DEV_DIR = path.join(ROOT, 'app-dev');
 
 const MIME_TYPES = {
   '.html': 'text/html',
@@ -55,9 +56,27 @@ const server = http.createServer((req, res) => {
     }
   }
 
-  // Decode URL and normalize
-  const decodedUrl = decodeURIComponent(req.url.split('?')[0]);
-  let filePath = path.join(ROOT, decodedUrl);
+  // Decode URL, strip trailing punctuation/parentheses, and normalize
+  let cleanUrl = req.url.split('?')[0].replace(/[\)\],]+$/, '');
+  const decodedUrl = decodeURIComponent(cleanUrl);
+
+  let filePath;
+  // Localhost root or /app-dev directly opens the cloned App Dev website
+  if (decodedUrl === '/' || decodedUrl === '' || decodedUrl === '/app-dev' || decodedUrl === '/app-dev/') {
+    filePath = path.join(APP_DEV_DIR, 'index.html');
+  } else if (decodedUrl === '/web-dev' || decodedUrl === '/web-dev/') {
+    filePath = path.join(ROOT, 'web-dev', 'index.html');
+  } else if (decodedUrl === '/main' || decodedUrl === '/main/' || decodedUrl === '/dms') {
+    filePath = path.join(ROOT, 'index.html');
+  } else {
+    // Check if file exists inside app-dev first
+    const appDevCandidate = path.join(APP_DEV_DIR, decodedUrl.replace(/^\/app-dev/, ''));
+    if (fs.existsSync(appDevCandidate) && !fs.statSync(appDevCandidate).isDirectory()) {
+      filePath = appDevCandidate;
+    } else {
+      filePath = path.join(ROOT, decodedUrl);
+    }
+  }
 
   // Security: prevent directory traversal
   if (!filePath.startsWith(ROOT)) {
@@ -66,15 +85,15 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Fallback check in app-dev or web-dev subdirectories for root-level asset requests
+  // Fallback checks
   if (!fs.existsSync(filePath)) {
-    const appDevCandidate = path.join(ROOT, 'app-dev', decodedUrl);
-    if (fs.existsSync(appDevCandidate)) {
-      filePath = appDevCandidate;
+    const fallbackInAppDev = path.join(APP_DEV_DIR, decodedUrl);
+    if (fs.existsSync(fallbackInAppDev)) {
+      filePath = fallbackInAppDev;
     } else {
-      const webDevCandidate = path.join(ROOT, 'web-dev', decodedUrl);
-      if (fs.existsSync(webDevCandidate)) {
-        filePath = webDevCandidate;
+      const fallbackInWebDev = path.join(ROOT, 'web-dev', decodedUrl);
+      if (fs.existsSync(fallbackInWebDev)) {
+        filePath = fallbackInWebDev;
       }
     }
   }
@@ -106,5 +125,5 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`DMS local server running at http://localhost:${PORT}`);
+  console.log(`Cloned App Dev website running at http://localhost:${PORT}`);
 });
