@@ -57,9 +57,22 @@
 
   const replaceHeroContent = () => {
     const candidates = [...document.querySelectorAll('div')];
-    const hero = candidates.find((element) => element.textContent.replace(/\s+/g, ' ').trim() === oldHeroCopy);
+    const hero = candidates.find((element) => {
+      const t = element.textContent.replace(/\s+/g, ' ').trim();
+      return t === oldHeroCopy || (t.includes('Work moves better') && t.includes('minimalist focus-break timer'));
+    });
     if (!hero || hero.parentElement.querySelector('.dms-hero-rendered')) return;
     hero.style.display = 'none';
+
+    // Hide Start For Free button and no credit card notice
+    document.querySelectorAll('button, a, div, span, p').forEach((el) => {
+      const text = el.textContent?.trim();
+      if (text === 'Start For Free' || text?.includes('No credit card required')) {
+        const row = el.closest('.flex') || el;
+        row.style.display = 'none';
+      }
+    });
+
     const replacement = document.createElement('div');
     replacement.className = 'dms-hero-rendered';
     replacement.innerHTML = `
@@ -315,21 +328,25 @@
   };
 
   let replacementTimer;
-  const scheduleReplacements = (delay = 1200) => {
-    if (replacementTimer) return;
+  const scheduleReplacements = (delay = 50) => {
+    applyDmsContent();
+    if (replacementTimer) clearTimeout(replacementTimer);
     replacementTimer = setTimeout(() => {
-      replacementTimer = undefined;
       applyDmsContent();
     }, delay);
   };
   const refreshAfterRoute = () => {
-    scheduleReplacements(1200);
-    setTimeout(applyDmsContent, 3200);
+    applyDmsContent();
+    scheduleReplacements(100);
+    setTimeout(applyDmsContent, 500);
+    setTimeout(applyDmsContent, 1500);
   };
 
   replaceBranding(document);
   disableExternalLinks(document);
   removeQrContent(document);
+  applyDmsContent();
+
   new MutationObserver((mutations) => {
     mutations.forEach(({ addedNodes }) => {
       addedNodes.forEach((node) => {
@@ -338,7 +355,7 @@
         removeQrContent(node);
       });
     });
-    scheduleReplacements();
+    scheduleReplacements(50);
   }).observe(document.documentElement, { childList: true, subtree: true });
 
   document.addEventListener('click', (event) => {
@@ -365,7 +382,12 @@
     checkRoute();
     return result;
   };
-  setInterval(checkRoute, 500);
-  if (document.readyState === 'complete') scheduleReplacements(1500);
-  else window.addEventListener('load', () => scheduleReplacements(1500), { once: true });
+  setInterval(checkRoute, 300);
+
+  // Immediate and staggered triggers
+  [0, 50, 150, 300, 600, 1000, 1500, 2500, 4000].forEach((ms) => {
+    setTimeout(applyDmsContent, ms);
+  });
+  if (document.readyState === 'complete') applyDmsContent();
+  else window.addEventListener('load', () => applyDmsContent(), { once: true });
 })();

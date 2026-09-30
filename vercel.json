@@ -54,6 +54,10 @@
       "destination": "/app-dev/index.html"
     },
     {
+      "source": "/app-dev/",
+      "destination": "/app-dev/index.html"
+    },
+    {
       "source": "/appdev",
       "destination": "/app-dev/index.html"
     },
@@ -72,6 +76,26 @@
     {
       "source": "/video/:path*",
       "destination": "/app-dev/video/:path*"
+    },
+    {
+      "source": "/cdn-cgi/:path*",
+      "destination": "/app-dev/cdn-cgi/:path*"
+    },
+    {
+      "source": "/img/:path*",
+      "destination": "/app-dev/img/:path*"
+    },
+    {
+      "source": "/dms-brand.css",
+      "destination": "/app-dev/dms-brand.css"
+    },
+    {
+      "source": "/dms-brand.js",
+      "destination": "/app-dev/dms-brand.js"
+    },
+    {
+      "source": "/dms-logo.svg",
+      "destination": "/app-dev/dms-logo.svg"
     }
   ]
 }
