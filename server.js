@@ -5,6 +5,7 @@ const path = require('path');
 const PORT = process.env.PORT || 8090;
 const ROOT = __dirname;
 const APP_DEV_DIR = path.join(ROOT, 'app-dev');
+const AI_AGENTS_DIR = path.join(ROOT, 'ai-agents');
 
 const MIME_TYPES = {
   '.html': 'text/html',
@@ -29,6 +30,10 @@ const MIME_TYPES = {
   '.splinecode': 'application/octet-stream',
   '.glb': 'model/gltf-binary',
   '.gltf': 'model/gltf+json',
+  '.bin': 'application/octet-stream',
+  '.mp3': 'audio/mpeg',
+  '.wav': 'audio/wav',
+  '.ogg': 'audio/ogg',
   '.wasm': 'application/wasm',
   '.webmanifest': 'application/manifest+json',
 };
@@ -66,15 +71,26 @@ const server = http.createServer((req, res) => {
     filePath = path.join(APP_DEV_DIR, 'index.html');
   } else if (decodedUrl === '/web-dev' || decodedUrl === '/web-dev/') {
     filePath = path.join(ROOT, 'web-dev', 'index.html');
+  } else if (decodedUrl === '/ai-agents' || decodedUrl === '/ai-agents/' || decodedUrl === '/ai-agent' || decodedUrl === '/aiagents' || decodedUrl === '/ai') {
+    filePath = path.join(AI_AGENTS_DIR, 'index.html');
   } else if (decodedUrl === '/main' || decodedUrl === '/main/' || decodedUrl === '/dms') {
     filePath = path.join(ROOT, 'index.html');
   } else {
-    // Check if file exists inside app-dev first
-    const appDevCandidate = path.join(APP_DEV_DIR, decodedUrl.replace(/^\/app-dev/, ''));
-    if (fs.existsSync(appDevCandidate) && !fs.statSync(appDevCandidate).isDirectory()) {
-      filePath = appDevCandidate;
-    } else {
-      filePath = path.join(ROOT, decodedUrl);
+    // Check if file exists inside ai-agents if prefixed or asset
+    if (decodedUrl.startsWith('/ai-agents/')) {
+      const relCandidate = path.join(AI_AGENTS_DIR, decodedUrl.replace(/^\/ai-agents\//, ''));
+      if (fs.existsSync(relCandidate) && !fs.statSync(relCandidate).isDirectory()) {
+        filePath = relCandidate;
+      }
+    }
+    if (!filePath) {
+      // Check if file exists inside app-dev first
+      const appDevCandidate = path.join(APP_DEV_DIR, decodedUrl.replace(/^\/app-dev/, ''));
+      if (fs.existsSync(appDevCandidate) && !fs.statSync(appDevCandidate).isDirectory()) {
+        filePath = appDevCandidate;
+      } else {
+        filePath = path.join(ROOT, decodedUrl);
+      }
     }
   }
 
@@ -87,13 +103,23 @@ const server = http.createServer((req, res) => {
 
   // Fallback checks
   if (!fs.existsSync(filePath)) {
-    const fallbackInAppDev = path.join(APP_DEV_DIR, decodedUrl);
-    if (fs.existsSync(fallbackInAppDev)) {
-      filePath = fallbackInAppDev;
+    const fallbackInAi = path.join(AI_AGENTS_DIR, decodedUrl.replace(/^\/ai-agents\/?/, ''));
+    if (fs.existsSync(fallbackInAi) && !fs.statSync(fallbackInAi).isDirectory()) {
+      filePath = fallbackInAi;
     } else {
-      const fallbackInWebDev = path.join(ROOT, 'web-dev', decodedUrl);
-      if (fs.existsSync(fallbackInWebDev)) {
-        filePath = fallbackInWebDev;
+      const fallbackInAiDirect = path.join(AI_AGENTS_DIR, decodedUrl);
+      if (fs.existsSync(fallbackInAiDirect) && !fs.statSync(fallbackInAiDirect).isDirectory()) {
+        filePath = fallbackInAiDirect;
+      } else {
+        const fallbackInAppDev = path.join(APP_DEV_DIR, decodedUrl);
+        if (fs.existsSync(fallbackInAppDev)) {
+          filePath = fallbackInAppDev;
+        } else {
+          const fallbackInWebDev = path.join(ROOT, 'web-dev', decodedUrl);
+          if (fs.existsSync(fallbackInWebDev)) {
+            filePath = fallbackInWebDev;
+          }
+        }
       }
     }
   }

@@ -1,0 +1,14 @@
+{
+  "name": "web3-esqrd-clone",
+  "version": "1.0.0",
+  "description": "Exact 1:1 clone of web3.esqrd.co with WebGL, Three.js, Draco/Basis WASM and animations",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "sync": "node sync-assets.js",
+    "sync:force": "node sync-assets.js --force"
+  },
+  "keywords": ["web3", "threejs", "draco", "gltf", "clone"],
+  "author": "",
+  "license": "ISC"
+}

@@ -96,6 +96,58 @@
     {
       "source": "/dms-logo.svg",
       "destination": "/app-dev/dms-logo.svg"
+    },
+    {
+      "source": "/ai-agents",
+      "destination": "/ai-agents/index.html"
+    },
+    {
+      "source": "/ai-agents/",
+      "destination": "/ai-agents/index.html"
+    },
+    {
+      "source": "/ai-agent",
+      "destination": "/ai-agents/index.html"
+    },
+    {
+      "source": "/aiagents",
+      "destination": "/ai-agents/index.html"
+    },
+    {
+      "source": "/ai",
+      "destination": "/ai-agents/index.html"
+    },
+    {
+      "source": "/_astro/:path*",
+      "destination": "/ai-agents/_astro/:path*"
+    },
+    {
+      "source": "/models/:path*",
+      "destination": "/ai-agents/models/:path*"
+    },
+    {
+      "source": "/textures/:path*",
+      "destination": "/ai-agents/textures/:path*"
+    },
+    {
+      "source": "/basis/:path*",
+      "destination": "/ai-agents/basis/:path*"
+    },
+    {
+      "source": "/draco/:path*",
+      "destination": "/ai-agents/draco/:path*"
+    },
+    {
+      "source": "/music/:path*",
+      "destination": "/ai-agents/music/:path*"
+    },
+    {
+      "source": "/fonts/:path*",
+      "destination": "/ai-agents/fonts/:path*"
+    },
+    {
+      "source": "/images/:path*",
+      "destination": "/ai-agents/images/:path*"
     }
   ]
 }
