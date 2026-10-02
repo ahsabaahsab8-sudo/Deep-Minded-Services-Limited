@@ -38,6 +38,8 @@ const MIME_TYPES = {
   '.ogg': 'audio/ogg',
   '.wasm': 'application/wasm',
   '.webmanifest': 'application/manifest+json',
+  '.xml': 'application/xml',
+  '.txt': 'text/plain',
 };
 
 const server = http.createServer((req, res) => {
